@@ -50,19 +50,27 @@ namespace SimplifiedDES
 
         private void EncryptAndDecrypt(List<BitArray> plainTextList, List<BitArray> cipherTextList)
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
+            Stopwatch completeWatch = new Stopwatch();
+            Stopwatch encryptionWatch = new Stopwatch();
+            Stopwatch decryptionWatch = new Stopwatch();
+            completeWatch.Start();
             KeyGeneration keygen = new KeyGeneration("1011011010");
+            encryptionWatch.Start();
             foreach (var content in plainTextList)
             {
                 var encrypted = Encryption.Encrypt(content, keygen.K1, keygen.K2);
             }
+            encryptionWatch.Stop();
+            decryptionWatch.Start();
             foreach (var content in cipherTextList)
             {
                 var decrypted = Decryption.Decrypt(content, keygen.K1, keygen.K2);
             }
-            watch.Stop();
-            Console.WriteLine("Encryption & Decryption Time: " + watch.Elapsed.TotalMilliseconds + " ms.");
+            decryptionWatch.Stop();
+            completeWatch.Stop();
+            Console.WriteLine("Encryption Time: " + encryptionWatch.Elapsed.TotalMilliseconds + " ms.");
+            Console.WriteLine("Decryption Time: " + decryptionWatch.Elapsed.TotalMilliseconds + " ms.");
+            Console.WriteLine("Encryption & Decryption Time: " + completeWatch.Elapsed.TotalMilliseconds + " ms.");
         }
     }
 }
