@@ -21,7 +21,7 @@ namespace SimplifiedDES
             return IP_1;
         }
 
-        private static BitArray SubBoxes(BitArray input, char[,] matrix)
+        internal static BitArray SubBoxes(BitArray input, char[,] matrix)
         {
             var permuted = Tools.Permute(input, "1,4,2,3");
             var inputSplit = Tools.SplitInHalf(permuted);
@@ -35,7 +35,7 @@ namespace SimplifiedDES
             return Tools.StringToBitArray(result);
         }
 
-        private static void FunctionK(BitArray[] input, BitArray key)
+        internal static void FunctionK(BitArray[] input, BitArray key)
         {
             var EP = Tools.Permute(input[1], "4,1,2,3,2,3,4,1");
             EP.Xor(key);

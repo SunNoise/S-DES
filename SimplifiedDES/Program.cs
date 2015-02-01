@@ -21,7 +21,7 @@ namespace SimplifiedDES
                 foreach(var content in contents)
                 {
                     Console.Write(Tools.BitArrayToString(content));
-                    var encrypted = Encryption.Encrypt(content, keygen.K1, keygen.K2);
+                    var encrypted = Decryption.Decrypt(content, keygen.K1, keygen.K2);
                     encryptedContents.Add(encrypted);
                     Console.WriteLine(String.Concat(",", Tools.BitArrayToString(encrypted)));
                 }
@@ -45,7 +45,7 @@ namespace SimplifiedDES
                     string[] values = line.Split(',');
 
                     //foreach value in values loop
-                    var bitArray = Tools.StringToBitArray(values[0]);
+                    var bitArray = Tools.StringToBitArray(values[1]);
                     fileContent.Add(bitArray);
                 }
             }
