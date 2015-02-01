@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,28 +17,22 @@ namespace SimplifiedDES
             try
             {
                 Program prog = new Program();
-                var contents = prog.ReadFile(args[0]);
-                KeyGeneration keygen = new KeyGeneration("1011011010");
-                var encryptedContents = new List<BitArray>();
-                foreach(var content in contents)
-                {
-                    Console.Write(Tools.BitArrayToString(content));
-                    var encrypted = Decryption.Decrypt(content, keygen.K1, keygen.K2);
-                    encryptedContents.Add(encrypted);
-                    Console.WriteLine(String.Concat(",", Tools.BitArrayToString(encrypted)));
-                }
+                var plainTextList = new List<BitArray>();
+                var cipherTextList = new List<BitArray>();
+                prog.ReadFile(args[0], out plainTextList, out cipherTextList);
+                prog.EncryptAndDecrypt(plainTextList, cipherTextList);
+                Console.ReadKey();
             }
             catch(Exception e)
             {
                 Console.Write(e.Message);
             }
-            //wait for key press to end.
-            Console.ReadKey();
         }
 
-        private List<BitArray> ReadFile(string fileName)
+        private void ReadFile(string fileName, out List<BitArray> plainText, out List<BitArray> cipherText)
         {
-            var fileContent = new List<BitArray>();
+            plainText = new List<BitArray>();
+            cipherText = new List<BitArray>();
 
             using (var reader = File.OpenText(fileName)) {
                 string line = null;
@@ -44,13 +40,29 @@ namespace SimplifiedDES
                 {
                     string[] values = line.Split(',');
 
-                    //foreach value in values loop
-                    var bitArray = Tools.StringToBitArray(values[1]);
-                    fileContent.Add(bitArray);
+                    var plain = Tools.StringToBitArray(values[0]);
+                    var cipher = Tools.StringToBitArray(values[1]);
+                    plainText.Add(plain);
+                    cipherText.Add(cipher);
                 }
             }
+        }
 
-            return fileContent;
+        private void EncryptAndDecrypt(List<BitArray> plainTextList, List<BitArray> cipherTextList)
+        {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            KeyGeneration keygen = new KeyGeneration("1011011010");
+            foreach (var content in plainTextList)
+            {
+                var encrypted = Encryption.Encrypt(content, keygen.K1, keygen.K2);
+            }
+            foreach (var content in cipherTextList)
+            {
+                var decrypted = Decryption.Decrypt(content, keygen.K1, keygen.K2);
+            }
+            watch.Stop();
+            Console.WriteLine("Encryption & Decryption Time: " + watch.Elapsed.TotalMilliseconds + " ms.");
         }
     }
 }

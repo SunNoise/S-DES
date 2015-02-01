@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attacks\Bruteforce.cs" />
     <Compile Include="Decryption.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="KeyGeneration.cs" />
