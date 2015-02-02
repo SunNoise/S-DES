@@ -128,5 +128,25 @@ namespace SimplifiedDES
 
             return value;
         }
+
+        internal static bool BitArrayEquals(BitArray BA1, BitArray BA2)
+        {
+            if (BA1.Length != BA2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < BA1.Length; i++)
+            {
+                if (BA1[i] != BA2[i])
+                {
+                    // since padding bits are forced to zero in the constructor,
+                    //  we can test those for equality just as well and the valid
+                    //  bits
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

@@ -33,5 +33,10 @@ namespace SimplifiedDES
 
             return Tools.Permute(output, "6,3,7,4,8,5,10,9");
         }
+
+        internal static BitArray ReverseKeyLookup()
+        {
+            throw new NotFiniteNumberException();
+        }
     }
 }
