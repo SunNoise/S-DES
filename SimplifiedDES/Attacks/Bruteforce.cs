@@ -54,6 +54,23 @@ namespace SimplifiedDES.Attacks
             throw new KeyNotFoundException();
         }
 
+        internal static IEnumerable<string> KeysForAll(List<string> keys, BitArray[] plainTextArray, BitArray[] cipherTextArray)
+        {
+            var uselessKeys = new List<string>();
+            foreach (var key in keys)
+            {
+                for (int x = 0; x < plainTextArray.Length; x++)
+                {
+                    if (DAttack(plainTextArray[x], cipherTextArray[x], key) == null)
+                    {
+                        uselessKeys.Add(key);
+                        break;
+                    }
+                }
+            }
+            return keys.Except(uselessKeys);
+        }
+
         private static string EAttack(BitArray plain, BitArray cipher, string key)
         {
             KeyGeneration keygen = new KeyGeneration(key);
