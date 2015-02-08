@@ -96,9 +96,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Databases\Precomputed.mdf" />
+    <Content Include="Databases\Precomputed.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Databases\Precomputed_log.ldf">
       <DependentUpon>Precomputed.mdf</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

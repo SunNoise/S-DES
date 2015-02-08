@@ -151,8 +151,9 @@ namespace SimplifiedDES
             return true;
         }
 
-        internal static void FillDB()
+        internal static void FillDB(out double percentage)
         {
+            percentage = 0;
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = ConfigurationManager.ConnectionStrings["SimplifiedDES.Properties.Settings.PrecomputedConnectionString"].ConnectionString;
@@ -176,7 +177,7 @@ namespace SimplifiedDES
                         insertCommand.ExecuteNonQuery();
 
                         z++;
-                        Console.WriteLine(z);
+                        percentage = z / 2621.44;
                     }
                 }
             }
