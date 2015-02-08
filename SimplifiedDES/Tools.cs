@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -147,6 +149,37 @@ namespace SimplifiedDES
                 }
             }
             return true;
+        }
+
+        internal static void FillDB()
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConfigurationManager.ConnectionStrings["SimplifiedDES.Properties.Settings.PrecomputedConnectionString"].ConnectionString;
+                conn.Open();
+
+                int z = 0;
+                for (int x = 0; x < 256; x++)
+                {
+                    string input = Convert.ToString(x, 2).PadLeft(8, '0');
+                    for (int y = 0; y < 1024; y++)
+                    {
+                        string key = Convert.ToString(y, 2).PadLeft(10, '0');
+                        KeyGeneration keygen = new KeyGeneration(key);
+                        string output = Tools.BitArrayToString(Encryption.Encrypt(Tools.StringToBitArray(input), keygen.K1, keygen.K2));
+
+                        SqlCommand insertCommand = new SqlCommand("INSERT INTO Combinations ([plain], [cipher], [key], [Id]) VALUES (@0, @1, @2, @3)", conn);
+                        insertCommand.Parameters.Add(new SqlParameter("0", input));
+                        insertCommand.Parameters.Add(new SqlParameter("1", output));
+                        insertCommand.Parameters.Add(new SqlParameter("2", key));
+                        insertCommand.Parameters.Add(new SqlParameter("3", z));
+                        insertCommand.ExecuteNonQuery();
+
+                        z++;
+                        Console.WriteLine(z);
+                    }
+                }
+            }
         }
     }
 }

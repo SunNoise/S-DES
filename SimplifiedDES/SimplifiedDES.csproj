@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attacks\Bruteforce.cs" />
+    <Compile Include="Attacks\Precomputed.cs" />
     <Compile Include="Decryption.cs" />
     <Compile Include="Encryption.cs" />
     <Compile Include="KeyGeneration.cs" />
